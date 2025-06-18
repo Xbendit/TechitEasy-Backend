@@ -48,6 +48,9 @@ public class Television {
         this. sold = sold;
     }
 
+    public Television(String type, String brand) {
+    }
+
     public int getId() {
         return id;
     }
