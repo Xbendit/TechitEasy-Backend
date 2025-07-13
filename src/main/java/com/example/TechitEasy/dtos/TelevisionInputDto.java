@@ -1,5 +1,7 @@
 package com.example.TechitEasy.dtos;
 
+import com.example.TechitEasy.models.RemoteController;
+
 public class TelevisionInputDto {
     public int id;
     public String type;
@@ -17,5 +19,6 @@ public class TelevisionInputDto {
     public boolean ambiLight;
     public int originalStock;
     public int sold;
+    public RemoteController remoteController;
 }
 

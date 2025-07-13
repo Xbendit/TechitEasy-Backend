@@ -5,6 +5,7 @@ import com.example.TechitEasy.dtos.TelevisionInputDto;
 import com.example.TechitEasy.exceptions.RecordNotFoundException;
 import com.example.TechitEasy.mappers.TelevisionMapper;
 import com.example.TechitEasy.models.Television;
+import com.example.TechitEasy.repository.RemoteControllerRepository;
 import com.example.TechitEasy.repository.TelevisionRepository;
 import org.springframework.stereotype.Service;
 
@@ -14,9 +15,16 @@ import java.util.List;
 public class TelevisionService {
 
     private final TelevisionRepository repos;
+    private final RemoteControllerRepository remoterepos;
+    private final TelevisionRepository televisionRepository;
+    private final RemoteControllerRepository remoteControllerRepository;
 
-    public TelevisionService(TelevisionRepository repos){
+
+    public TelevisionService(TelevisionRepository repos, RemoteControllerRepository remoterepos, TelevisionRepository televisionRepository, RemoteControllerRepository remoteControllerRepository){
         this.repos = repos;
+        this.remoterepos = remoterepos;
+        this.televisionRepository = televisionRepository;
+        this.remoteControllerRepository = remoteControllerRepository;
     }
 
     public Television createTelevision(TelevisionDto televisionInputDto){
@@ -66,6 +74,23 @@ public class TelevisionService {
         Television savedTelevision = repos.save(television);
 
         return TelevisionMapper.televisionInputDto(savedTelevision);
+
+    }
+
+    public void assignRemoteControllerToTelevision (int id, Long remoteControllerId){
+        var optionalTelevision = televisionRepository.findById(id);
+        var optionalRemoteController = remoteControllerRepository.findById(remoteControllerId);
+
+        if (optionalTelevision.isPresent() && optionalRemoteController.isPresent()){
+            var television = optionalTelevision.get();
+            var remoteController = optionalRemoteController.get();
+
+            television.setRemoteController(remoteController);
+            televisionRepository.save(television);
+
+        }else{
+            throw new RecordNotFoundException("Nothing found");
+        }
 
     }
 

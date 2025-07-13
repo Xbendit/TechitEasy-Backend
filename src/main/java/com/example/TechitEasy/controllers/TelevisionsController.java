@@ -23,11 +23,6 @@ public class TelevisionsController {
     private final TelevisionService service;
     private final TelevisionService televisionService;
 
-    /*private final TelevisionRepository repos;*/
-
-    /*public TelevisionsController(TelevisionRepository repos){
-    this.repos = repos;
-}*/
     public TelevisionsController(TelevisionService service, TelevisionService televisionService){
         this.service = service;
         this.televisionService = televisionService;
@@ -35,7 +30,6 @@ public class TelevisionsController {
 
     @PostMapping
     public ResponseEntity<TelevisionInputDto> createTeleversions(@Valid @RequestBody TelevisionDto televisionDto){
-
 
         Television television = this.service.createTelevision(televisionDto);
 
@@ -69,6 +63,11 @@ public class TelevisionsController {
         String result = service.deleteTelevision(id);
         return ResponseEntity.ok(result);
 
+    }
+
+    @PutMapping("/televisions/{id}/remotecontroller/{remoteId}")
+    public void assignRemoteControllerToTelevision(@PathVariable("id") int id, @PathVariable Long remoteId){
+        televisionService.assignRemoteControllerToTelevision(id,remoteId);
     }
 
 }

@@ -1,6 +1,10 @@
 package com.example.TechitEasy.models;
 
 import jakarta.persistence.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "Televisions")
@@ -29,6 +33,31 @@ public class Television {
     public Television(){
 
     }
+
+    @OneToOne
+    RemoteController remoteController;
+
+    public RemoteController getRemoteController() {
+        return remoteController;
+    }
+
+    public void setRemoteController(RemoteController remoteController) {
+        this.remoteController = remoteController;
+    }
+
+    @OneToMany(
+            mappedBy = "television",
+            cascade = CascadeType.ALL,
+            orphanRemoval =true)
+    private List<CIModule> ciModules =new ArrayList<>();
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "television_wallbrackets",
+            joinColumns = @JoinColumn(name="television_id"),
+            inverseJoinColumns = @JoinColumn(name = "wallbracket_id")
+    )
+    private Set<WallBracket> wallBrackets = new HashSet<>();
 
 
     public Television(String type,String brand, Double price, Double availableSize, int refreshRate, String screenType, String screenQuality, boolean smartTv, boolean wifi, boolean voiceControl, boolean hdr, boolean bluethooth, boolean ambiLight, int originalStock, int sold) {
